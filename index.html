@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Great Indian Grub – Carnival Menu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #020617;
+      --card: rgba(15, 23, 42, 0.9);
+      --accent: #38bdf8; /* sky blue */
+      --accent-soft: rgba(56, 189, 248, 0.2);
+      --accent-strong: #0ea5e9;
+      --text: #f9fafb;
+      --muted: #9ca3af;
+      --danger: #f97373;
+      --border-soft: rgba(148, 163, 184, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #1d4ed8 0, transparent 55%),
+        radial-gradient(circle at bottom right, #0f766e 0, transparent 55%),
+        radial-gradient(circle at top, #020617 0, #020617 55%);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      padding: 18px 12px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 460px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.85));
+      border-radius: 24px;
+      padding: 18px 18px 16px;
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 10% -10%, rgba(56, 189, 248, 0.22), transparent 60%),
+        radial-gradient(circle at 110% 110%, rgba(37, 99, 235, 0.18), transparent 60%);
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 6px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--accent);
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      padding: 4px 11px;
+      border: 1px solid rgba(56, 189, 248, 0.55);
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+    }
+
+    .time-pill {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: var(--muted);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+
+    .title-block {
+      margin-bottom: 12px;
+    }
+
+    .title-line {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    h1 {
+      font-size: 24px;
+      line-height: 1.25;
+    }
+
+    .moon {
+      font-size: 22px;
+      filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .subtitle strong {
+      color: var(--accent-strong);
+      font-weight: 600;
+    }
+
+    .location-banner {
+      margin: 12px 0 14px;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 10px 10px;
+      border-radius: 16px;
+      background: radial-gradient(circle at left, var(--accent-soft), rgba(15, 23, 42, 0.9));
+      border: 1px solid var(--border-soft);
+    }
+
+    .location-banner span.label {
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 10px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .location-banner span.value {
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+
+    .location-banner span.highlight {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .chips-row {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      font-size: 11px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      color: var(--muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .chip.hot {
+      border-color: rgba(248, 113, 113, 0.7);
+      color: #fecaca;
+    }
+
+    .menu-section {
+      margin-top: 12px;
+    }
+
+    .menu-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .menu-section-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .section-pill {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.6);
+      color: var(--accent);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .menu-list {
+      list-style: none;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.95);
+      overflow: hidden;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.85);
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .menu-item-name-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .menu-item-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .menu-item-tag {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      color: var(--muted);
+    }
+
+    .menu-item-note {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .menu-item-price {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-strong);
+      margin-left: 8px;
+      white-space: nowrap;
+    }
+
+    .menu-item-price small {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 400;
+      text-align: right;
+    }
+
+    .cta-row {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      flex: 1;
+      border-radius: 999px;
+      padding: 10px 12px;
+      border: 1px solid rgba(56, 189, 248, 0.9);
+      background: radial-gradient(circle at top, #38bdf8, #0ea5e9);
+      color: #0b1220;
+      font-weight: 600;
+      font-size: 13px;
+      text-align: center;
+      text-decoration: none;
+      box-shadow:
+        0 14px 32px rgba(56, 189, 248, 0.55),
+        0 0 0 1px rgba(15, 23, 42, 0.8) inset;
+    }
+
+    .btn span.small {
+      display: block;
+      font-size: 10px;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      border-radius: 999px;
+      padding: 10px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.75);
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 12px;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .footer-note {
+      margin-top: 12px;
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .footer-note span {
+      color: var(--accent);
+    }
+
+    @media (min-width: 480px) {
+      h1 {
+        font-size: 26px;
+      }
+      .card {
+        padding: 20px 20px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card">
+      <!-- TOP BADGE -->
+      <div class="badge-row">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Carnival Special Menu
+        </div>
+        <div class="time-pill">Today Only</div>
+      </div>
+
+      <!-- TITLE -->
+      <div class="title-block">
+        <div class="title-line">
+          <h1>The Great Indian Grub</h1>
+          <span class="moon">🌙</span>
+        </div>
+        <p class="subtitle">
+          Scan, browse the menu, then <strong>order at the counter</strong> or via WhatsApp.
+        </p>
+      </div>
+
+      <!-- LOCATION & QUICK INFO -->
+      <div class="location-banner">
+        <span class="label">Stall</span>
+        <span class="value">
+          <span class="highlight">The Great Indian Grub</span> · Carnival Ground – Stall No. <span class="highlight">GIG-01</span> 
+          (update if needed).
+        </span>
+        <div class="chips-row">
+          <div class="chip hot">Freshly prepared</div>
+          <div class="chip">Veg snacks</div>
+          <div class="chip">Drinks &amp; chaats</div>
+        </div>
+      </div>
+
+      <!-- DRINKS SECTION -->
+      <div class="menu-section">
+        <div class="menu-section-header">
+          <div class="menu-section-title">Signature Drinks</div>
+          <div class="section-pill">Chilled • 200ml (approx.)</div>
+        </div>
+        <ul class="menu-list">
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Blue Lagoon</span>
+                <span class="menu-item-tag">Drink</span>
+              </div>
+              <span class="menu-item-note">Refreshing blue mocktail, perfect to cool down.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹70
+              <small>per glass</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Orange Moon</span>
+                <span class="menu-item-tag">Drink</span>
+              </div>
+              <span class="menu-item-note">Citrusy orange mocktail with a desi twist.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹70
+              <small>per glass</small>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- SNACKS SECTION -->
+      <div class="menu-section">
+        <div class="menu-section-header">
+          <div class="menu-section-title">Chaats &amp; Snacks</div>
+          <div class="section-pill">Veg · Single serving</div>
+        </div>
+        <ul class="menu-list">
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Pani Puri</span>
+                <span class="menu-item-tag">Chaat</span>
+              </div>
+              <span class="menu-item-note">Crispy puris with spicy &amp; tangy pani.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹30
+              <small>per plate</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Samosa</span>
+                <span class="menu-item-tag">Snack</span>
+              </div>
+              <span class="menu-item-note">Classic potato-filled samosa, served hot.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹30
+              <small>per piece / plate (as decided)</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Kachori</span>
+                <span class="menu-item-tag">Snack</span>
+              </div>
+              <span class="menu-item-note">Crispy kachori with savoury filling.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹30
+              <small>per piece / plate (as decided)</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Dahi Puri</span>
+                <span class="menu-item-tag">Chaat</span>
+              </div>
+              <span class="menu-item-note">Puris with curd, chutneys &amp; toppings.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹50
+              <small>per plate</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Bhel Puri</span>
+                <span class="menu-item-tag">Chaat</span>
+              </div>
+              <span class="menu-item-note">Puffed rice mix with chutneys &amp; veggies.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹30
+              <small>per plate</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Sweet Corn</span>
+                <span class="menu-item-tag">Snack</span>
+              </div>
+              <span class="menu-item-note">Steamed sweet corn with light seasoning.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹30
+              <small>per cup</small>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- CTA BUTTONS -->
+      <div class="cta-row">
+        <!-- WhatsApp 1: 8296497920 -->
+        <a class="btn" href="https://wa.me/918296497920?text=Hi%2C%20I%20am%20at%20The%20Great%20Indian%20Grub%20carnival%20stall%20and%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener">
+          WhatsApp Order 1
+          <span class="small">Chat on 82964 97920</span>
+        </a>
+
+        <!-- WhatsApp 2: 9743450681 -->
+        <a class="btn" href="https://wa.me/919743450681?text=Hi%2C%20I%20am%20at%20The%20Great%20Indian%20Grub%20carnival%20stall%20and%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener">
+          WhatsApp Order 2
+          <span class="small">Chat on 97434 50681</span>
+        </a>
+
+        <!-- Call button (uses first number) -->
+        <a class="btn-secondary" href="tel:+918296497920">
+          Call Stall
+        </a>
+      </div>
+
+      <!-- FOOTER NOTE -->
+      <div class="footer-note">
+        Menu &amp; prices are <span>subject to availability</span>.  
+        Please confirm final amount at the billing counter.
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -107,6 +107,52 @@
       border-color: rgba(56, 189, 248, 1);
     }
 
+    /* Little dialog / tooltip for Games */
+    .games-hint {
+      position: absolute;
+      top: 100%;
+      right: 6px;
+      margin-top: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.7);
+      font-size: 10px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      white-space: nowrap;
+      pointer-events: auto;
+    }
+
+    .games-hint::after {
+      content: "";
+      position: absolute;
+      top: -5px;
+      right: 16px;
+      width: 10px;
+      height: 10px;
+      background: rgba(15, 23, 42, 0.95);
+      border-left: 1px solid rgba(56, 189, 248, 0.7);
+      border-top: 1px solid rgba(56, 189, 248, 0.7);
+      transform: rotate(45deg);
+    }
+
+    .games-hint.hidden {
+      opacity: 0;
+      transform: translateY(-4px);
+      pointer-events: none;
+    }
+
+    .games-hint span.icon {
+      font-size: 12px;
+    }
+
     .card {
       background: linear-gradient(145deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.85));
       border-radius: 24px;
@@ -560,6 +606,12 @@
       <span class="dot"></span>
       GAMES
     </a>
+
+    <!-- Intro hint bubble for Games -->
+    <div id="games-hint" class="games-hint">
+      <span class="icon">🎯</span>
+      <span>Tap here for games menu</span>
+    </div>
   </div>
 
   <div class="wrapper">
@@ -882,8 +934,8 @@
       <div class="cta-row">
         <!-- WhatsApp: 8296497920 -->
         <a class="btn" href="https://wa.me/918296497920?text=Hi%2C%20I%20am%20at%20The%20Great%20Indian%20Grub%20carnival%20stall%20and%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener">
-          WhatsApp
-          <span class="small">Chat on 82964 97920</span>
+          The Great Indian Grub
+          <span class="small">WhatsApp · 82964 97920</span>
         </a>
 
         <!-- Call button uses 9743450681 -->
@@ -901,7 +953,7 @@
     </div>
   </div>
 
-  <!-- Custom smooth scroll -->
+  <!-- Custom smooth scroll + hint logic -->
   <script>
     function smoothScrollTo(targetY, duration) {
       const startY = window.pageYOffset;
@@ -928,6 +980,8 @@
       window.requestAnimationFrame(step);
     }
 
+    const gamesHint = document.getElementById('games-hint');
+
     document.querySelectorAll('.nav-link').forEach(function (link) {
       link.addEventListener('click', function () {
         const targetId = this.getAttribute('data-target');
@@ -939,7 +993,20 @@
         const targetPosition = elementPosition - topOffset;
 
         smoothScrollTo(targetPosition, 600); // 600ms glide
+
+        // Hide hint when any nav clicked (especially GAMES)
+        if (gamesHint) {
+          gamesHint.classList.add('hidden');
+        }
       });
+    });
+
+    // Auto-hide the games hint a few seconds after load
+    window.addEventListener('load', function () {
+      if (!gamesHint) return;
+      setTimeout(function () {
+        gamesHint.classList.add('hidden');
+      }, 4500); // 4.5 seconds
     });
   </script>
 </body>

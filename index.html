@@ -19,6 +19,10 @@
       --border-soft: rgba(148, 163, 184, 0.4);
     }
 
+    html {
+      scroll-behavior: smooth; /* extra safety, JS will handle too */
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -35,12 +39,74 @@
       color: var(--text);
       display: flex;
       justify-content: center;
-      padding: 18px 12px;
+      padding: 72px 12px 18px; /* space for floating bar */
     }
 
     .wrapper {
       width: 100%;
       max-width: 460px;
+      position: relative;
+    }
+
+    /* TOP FLOATING NAV BAR */
+    .top-nav {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.94));
+      border: 1px solid rgba(56, 189, 248, 0.55);
+      box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-chip {
+      padding: 7px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.8);
+      font-size: 11px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.08s ease, box-shadow 0.18s ease;
+    }
+
+    .nav-chip span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(248, 250, 252, 0.9);
+      box-shadow: 0 0 10px rgba(248, 250, 252, 0.9);
+    }
+
+    .nav-chip.primary {
+      background: radial-gradient(circle at top, #38bdf8, #0ea5e9);
+      color: #020617;
+      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.75);
+    }
+
+    .nav-chip.secondary {
+      background: rgba(15, 23, 42, 0.96);
+      color: var(--accent);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .nav-chip:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 36px rgba(56, 189, 248, 0.65);
+      border-color: rgba(56, 189, 248, 1);
     }
 
     .card {
@@ -191,12 +257,12 @@
     }
 
     .menu-section {
-      margin-top: 12px;
+      margin-top: 16px;
     }
 
     .menu-section-header {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       justify-content: space-between;
       margin-bottom: 6px;
     }
@@ -208,13 +274,9 @@
       color: var(--muted);
     }
 
-    .section-pill {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(56, 189, 248, 0.6);
-      color: var(--accent);
-      background: rgba(15, 23, 42, 0.9);
+    .menu-section-caption {
+      font-size: 11px;
+      color: var(--muted);
     }
 
     .menu-list {
@@ -285,8 +347,37 @@
       text-align: right;
     }
 
+    /* Games prices layout */
+    .game-prices {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      margin-left: 10px;
+    }
+
+    .game-price-col {
+      text-align: right;
+    }
+
+    .game-price-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .game-price-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-strong);
+    }
+
+    .game-price-value.muted {
+      color: rgba(148, 163, 184, 0.8);
+    }
+
     .cta-row {
-      margin-top: 14px;
+      margin-top: 16px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
@@ -328,6 +419,13 @@
       text-decoration: none;
     }
 
+    .btn-secondary span.small {
+      display: block;
+      font-size: 10px;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+
     .footer-note {
       margin-top: 12px;
       font-size: 10px;
@@ -350,6 +448,18 @@
   </style>
 </head>
 <body>
+  <!-- FLOATING TOP BAR -->
+  <div class="top-nav">
+    <a href="#food-menu" class="nav-chip primary nav-link" data-target="food-menu">
+      <span class="dot"></span>
+      FOOD MENU
+    </a>
+    <a href="#games" class="nav-chip secondary nav-link" data-target="games">
+      <span class="dot"></span>
+      GAMES
+    </a>
+  </div>
+
   <div class="wrapper">
     <div class="card">
       <!-- TOP BADGE -->
@@ -368,7 +478,7 @@
           <span class="moon">🌙</span>
         </div>
         <p class="subtitle">
-          Scan, browse the menu, then <strong>order at the counter</strong> or via WhatsApp.
+          Scan, browse the menu, then <strong>order at the counter</strong> &amp; <strong>play the games</strong>.
         </p>
       </div>
 
@@ -376,74 +486,21 @@
       <div class="location-banner">
         <span class="label">Stall</span>
         <span class="value">
-          <span class="highlight">The Great Indian Grub</span> · Carnival Ground – Stall No. <span class="highlight">GIG-01</span> 
-          (update if needed).
+          <span class="highlight">The Great Indian Grub</span> · Carnival Ground 
         </span>
         <div class="chips-row">
           <div class="chip hot">Freshly prepared</div>
-          <div class="chip">Veg snacks</div>
-          <div class="chip">Drinks &amp; chaats</div>
+          <div class="chip">Chaats &amp; snacks</div>
+          <div class="chip">Maggi specials</div>
         </div>
       </div>
 
-      <!-- DRINKS SECTION -->
-      <div class="menu-section">
+      <!-- FOOD MENU SECTION -->
+      <div id="food-menu" class="menu-section">
         <div class="menu-section-header">
-          <div class="menu-section-title">Signature Drinks</div>
-          <div class="section-pill">Chilled • 200ml (approx.)</div>
+          <div class="menu-section-title">Chaats, Snacks &amp; Maggi</div>
         </div>
         <ul class="menu-list">
-          <li class="menu-item">
-            <div class="menu-item-main">
-              <div class="menu-item-name-row">
-                <span class="menu-item-name">Blue Lagoon</span>
-                <span class="menu-item-tag">Drink</span>
-              </div>
-              <span class="menu-item-note">Refreshing blue mocktail, perfect to cool down.</span>
-            </div>
-            <div class="menu-item-price">
-              ₹70
-              <small>per glass</small>
-            </div>
-          </li>
-
-          <li class="menu-item">
-            <div class="menu-item-main">
-              <div class="menu-item-name-row">
-                <span class="menu-item-name">Orange Moon</span>
-                <span class="menu-item-tag">Drink</span>
-              </div>
-              <span class="menu-item-note">Citrusy orange mocktail with a desi twist.</span>
-            </div>
-            <div class="menu-item-price">
-              ₹70
-              <small>per glass</small>
-            </div>
-          </li>
-        </ul>
-      </div>
-
-      <!-- SNACKS SECTION -->
-      <div class="menu-section">
-        <div class="menu-section-header">
-          <div class="menu-section-title">Chaats &amp; Snacks</div>
-          <div class="section-pill">Veg · Single serving</div>
-        </div>
-        <ul class="menu-list">
-          <li class="menu-item">
-            <div class="menu-item-main">
-              <div class="menu-item-name-row">
-                <span class="menu-item-name">Pani Puri</span>
-                <span class="menu-item-tag">Chaat</span>
-              </div>
-              <span class="menu-item-note">Crispy puris with spicy &amp; tangy pani.</span>
-            </div>
-            <div class="menu-item-price">
-              ₹30
-              <small>per plate</small>
-            </div>
-          </li>
-
           <li class="menu-item">
             <div class="menu-item-main">
               <div class="menu-item-name-row">
@@ -454,7 +511,7 @@
             </div>
             <div class="menu-item-price">
               ₹30
-              <small>per piece / plate (as decided)</small>
+              <small>per plate</small>
             </div>
           </li>
 
@@ -468,20 +525,20 @@
             </div>
             <div class="menu-item-price">
               ₹30
-              <small>per piece / plate (as decided)</small>
+              <small>per plate</small>
             </div>
           </li>
 
           <li class="menu-item">
             <div class="menu-item-main">
               <div class="menu-item-name-row">
-                <span class="menu-item-name">Dahi Puri</span>
+                <span class="menu-item-name">Pani Puri</span>
                 <span class="menu-item-tag">Chaat</span>
               </div>
-              <span class="menu-item-note">Puris with curd, chutneys &amp; toppings.</span>
+              <span class="menu-item-note">Crispy puris with spicy &amp; tangy pani.</span>
             </div>
             <div class="menu-item-price">
-              ₹50
+              ₹30
               <small>per plate</small>
             </div>
           </li>
@@ -503,14 +560,184 @@
           <li class="menu-item">
             <div class="menu-item-main">
               <div class="menu-item-name-row">
-                <span class="menu-item-name">Sweet Corn</span>
-                <span class="menu-item-tag">Snack</span>
+                <span class="menu-item-name">Dahi Papdi</span>
+                <span class="menu-item-tag">Chaat</span>
               </div>
-              <span class="menu-item-note">Steamed sweet corn with light seasoning.</span>
+              <span class="menu-item-note">Papdi topped with curd, chutneys &amp; spices.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹50
+              <small>per plate</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Maggi</span>
+                <span class="menu-item-tag">Maggi</span>
+              </div>
+              <span class="menu-item-note">Simple, classic masala Maggi.</span>
             </div>
             <div class="menu-item-price">
               ₹30
-              <small>per cup</small>
+              <small>per plate</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Vegetable Maggi</span>
+                <span class="menu-item-tag">Maggi</span>
+              </div>
+              <span class="menu-item-note">Maggi with mixed veggies for extra flavour.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹40
+              <small>per plate</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Cheese Maggi</span>
+                <span class="menu-item-tag">Maggi</span>
+              </div>
+              <span class="menu-item-note">Creamy Maggi topped with cheese.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹50
+              <small>per plate</small>
+            </div>
+          </li>
+
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Corn &amp; Cheese Maggi</span>
+                <span class="menu-item-tag">Maggi</span>
+              </div>
+              <span class="menu-item-note">Maggi loaded with sweet corn &amp; cheese.</span>
+            </div>
+            <div class="menu-item-price">
+              ₹60
+              <small>per plate</small>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- GAMES SECTION -->
+      <div id="games" class="menu-section">
+        <div class="menu-section-header">
+          <div class="menu-section-title">Play &amp; Win – Games</div>
+          <div class="menu-section-caption">Fun corner · Pay per game</div>
+        </div>
+        <ul class="menu-list">
+          <!-- Foosball -->
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Foosball</span>
+                <span class="menu-item-tag">Game</span>
+              </div>
+              <span class="menu-item-note">Fast-paced table football. Best of goals wins.</span>
+            </div>
+            <div class="game-prices">
+              <div class="game-price-col">
+                <div class="game-price-label">Single</div>
+                <div class="game-price-value">₹40</div>
+              </div>
+              <div class="game-price-col">
+                <div class="game-price-label">1v1</div>
+                <div class="game-price-value">₹60</div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Jenga -->
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Jenga</span>
+                <span class="menu-item-tag">Game</span>
+              </div>
+              <span class="menu-item-note">Pull the blocks carefully… don’t topple the tower!</span>
+            </div>
+            <div class="game-prices">
+              <div class="game-price-col">
+                <div class="game-price-label">Single</div>
+                <div class="game-price-value">₹30</div>
+              </div>
+              <div class="game-price-col">
+                <div class="game-price-label">1v1</div>
+                <div class="game-price-value">₹50</div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Darts -->
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Darts</span>
+                <span class="menu-item-tag">Game</span>
+              </div>
+              <span class="menu-item-note">Aim for the bullseye – highest score wins.</span>
+            </div>
+            <div class="game-prices">
+              <div class="game-price-col">
+                <div class="game-price-label">Single</div>
+                <div class="game-price-value">₹30</div>
+              </div>
+              <div class="game-price-col">
+                <div class="game-price-label">1v1</div>
+                <div class="game-price-value">₹50</div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Shooting Arena -->
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Shooting Arena</span>
+                <span class="menu-item-tag">Game</span>
+              </div>
+              <span class="menu-item-note">Take your shots and see how many targets you hit.</span>
+            </div>
+            <div class="game-prices">
+              <div class="game-price-col">
+                <div class="game-price-label">Single</div>
+                <div class="game-price-value">₹20</div>
+              </div>
+              <div class="game-price-col">
+                <div class="game-price-label">1v1</div>
+                <div class="game-price-value muted">—</div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Magic Box -->
+          <li class="menu-item">
+            <div class="menu-item-main">
+              <div class="menu-item-name-row">
+                <span class="menu-item-name">Magic Box</span>
+                <span class="menu-item-tag">Game</span>
+              </div>
+              <span class="menu-item-note">30 seconds to try your luck and win surprises.</span>
+            </div>
+            <div class="game-prices">
+              <div class="game-price-col">
+                <div class="game-price-label">Single</div>
+                <div class="game-price-value">₹20</div>
+              </div>
+              <div class="game-price-col">
+                <div class="game-price-label">Duration</div>
+                <div class="game-price-value">30 sec</div>
+              </div>
             </div>
           </li>
         </ul>
@@ -518,21 +745,16 @@
 
       <!-- CTA BUTTONS -->
       <div class="cta-row">
-        <!-- WhatsApp 1: 8296497920 -->
+        <!-- WhatsApp: 8296497920 -->
         <a class="btn" href="https://wa.me/918296497920?text=Hi%2C%20I%20am%20at%20The%20Great%20Indian%20Grub%20carnival%20stall%20and%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener">
-          WhatsApp Order 1
+          WhatsApp
           <span class="small">Chat on 82964 97920</span>
         </a>
 
-        <!-- WhatsApp 2: 9743450681 -->
-        <a class="btn" href="https://wa.me/919743450681?text=Hi%2C%20I%20am%20at%20The%20Great%20Indian%20Grub%20carnival%20stall%20and%20would%20like%20to%20place%20an%20order." target="_blank" rel="noopener">
-          WhatsApp Order 2
-          <span class="small">Chat on 97434 50681</span>
-        </a>
-
-        <!-- Call button (uses first number) -->
-        <a class="btn-secondary" href="tel:+918296497920">
+        <!-- Call button uses 9743450681 -->
+        <a class="btn-secondary" href="tel:+919743450681">
           Call Stall
+          <span class="small">Tap to call 97434 50681</span>
         </a>
       </div>
 
@@ -543,5 +765,26 @@
       </div>
     </div>
   </div>
+
+  <!-- Smooth scroll JS (extra smooth + offset for top bar) -->
+  <script>
+    document.querySelectorAll('.nav-link').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('data-target');
+        const targetEl = document.getElementById(targetId);
+        if (!targetEl) return;
+
+        const topOffset = 80; // space for floating bar
+        const elementPosition = targetEl.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - topOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
 </body>
 </html>
